@@ -1,5 +1,6 @@
 from order import *
-
+from heapq import *
+from validate import *
 
 userInput = input()
 
@@ -8,10 +9,11 @@ if userInput.strip():
 else:
     userCommand = "No words in the input"
 
+sellOrderBook = []
+buyOrderBook = []
 
 
 while userCommand[0] != "end":
-    #print("O comando é: " + userCommand[0])
 
     userInput = input()
 
@@ -22,34 +24,23 @@ while userCommand[0] != "end":
 
             case "limit":
 
-                # sintax comando limit
-                if len(userCommand) != 4:
-                    print("limit orders should have 3 parameters: limit side price qnt")
+                try:
+                    orderType, side, price, qnt = validLimitOrder(userCommand)
+                except:
+                    continue
+       
+                newOrder = Order(orderType, side, qnt, price)
+        
+                if newOrder.side == Side.BUY.value:
+                    newOrder.invertPrice()
+                    heappush(buyOrderBook, newOrder)
                 else:
-                    orderType, side, price, qnt = userCommand
+                    heappush(sellOrderBook, newOrder)
 
-                    if isValidEnum(Side, side):
-                        print("ok side")
-                    else:
-                        print("Side value should be buy or sell")
-
-                    # checa preço e qnt
-                    try:
-                        price = float(price)
-                    except:
-                        print("price parameter should be a number")
-                    
-                    try:
-                        qnt = int(qnt)
-                    except:
-                        print("qnt parameter should be an integer")
-
-                    
-                    newOrder = Order(orderType, side, qnt, price)
-                    print(vars(newOrder))
-
-                    
+                #tries to match
                 
+                # add to order book if match not found
+                                   
             case "market":
                 print(OrderType.MARKET)
         
@@ -57,5 +48,7 @@ while userCommand[0] != "end":
         userCommand = "No words in the input"
 
 
+for i in range(len(buyOrderBook)):
+    print(heappop(buyOrderBook))
 
 

@@ -18,7 +18,22 @@ class Order:
         self.side = side
         self.price = price
         self.qnt = qnt
+        #implement id
+        self.id = 1
+
+    def __lt__(self, other):
+        return self.price < other.price
+    
+    def __str__(self):
+        if self.price != None:
+            return f"{self.type} {self.side} {abs(self.price)} {self.qnt}"
+        else:
+            return f"{self.type} {self.side} {self.qnt}"
 
     def updateOrder(self, price, qnt):
         self.price = price
         self.qnt = qnt
+    
+    def invertPrice(self):
+        self.price = self.price*(-1)
+    
