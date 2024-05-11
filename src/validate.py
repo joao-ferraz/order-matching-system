@@ -45,3 +45,6 @@ def validMarketOrder(userInput: list):
         else:
             print("Side value should be buy or sell")
             return None
+        
+def noMatch():
+    print("Not a valid command. Valid commands are: limit, market, end")

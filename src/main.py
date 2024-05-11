@@ -4,10 +4,10 @@ from validate import *
 from matching import *
 
 userCommand = [None]
-#userCommand[0] = "start"
 
 sellOrderBook = []
 buyOrderBook = []
+idOrderBook = {}
 
 while userCommand[0] != "end":
 
@@ -41,6 +41,8 @@ while userCommand[0] != "end":
                     matchMarketOrder(newOrder,sellOrderBook)
                 else:
                     matchMarketOrder(newOrder,buyOrderBook)
+            case _:
+                noMatch()
         
     else:
         userCommand = "No words in the input"
