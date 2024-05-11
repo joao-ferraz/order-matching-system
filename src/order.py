@@ -26,7 +26,7 @@ class Order:
     
     def __str__(self):
         if self.price != None:
-            return f"{self.type} {self.side} {abs(self.price)} {self.qnt}"
+            return f"{self.side} {self.qnt} @ {abs(self.price)}"
         else:
             return f"{self.type} {self.side} {self.qnt}"
 

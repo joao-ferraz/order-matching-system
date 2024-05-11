@@ -1,17 +1,13 @@
 from order import *
 from heapq import *
 from validate import *
+from matching import *
 
-userInput = input()
-
-if userInput.strip():
-    userCommand = userInput.split()
-else:
-    userCommand = "No words in the input"
+userCommand = [None]
+#userCommand[0] = "start"
 
 sellOrderBook = []
 buyOrderBook = []
-
 
 while userCommand[0] != "end":
 
@@ -21,34 +17,38 @@ while userCommand[0] != "end":
         userCommand = userInput.split()
 
         match userCommand[0]:
-
             case "limit":
-
                 try:
                     orderType, side, price, qnt = validLimitOrder(userCommand)
                 except:
                     continue
-       
-                newOrder = Order(orderType, side, qnt, price)
-        
-                if newOrder.side == Side.BUY.value:
-                    newOrder.invertPrice()
-                    heappush(buyOrderBook, newOrder)
-                else:
-                    heappush(sellOrderBook, newOrder)
-
-                #tries to match
                 
-                # add to order book if match not found
+                newOrder = Order(orderType, side, qnt, price)
+                if newOrder.side == Side.BUY.value:
+                    findMatch(newOrder,sellOrderBook, buyOrderBook)
+                else:
+                    newOrder.invertPrice()
+                    findMatch(newOrder,buyOrderBook, sellOrderBook)
                                    
             case "market":
-                print(OrderType.MARKET)
+                try:
+                    orderType, side, qnt = validMarketOrder(userCommand)
+                except:
+                    continue
+                
+                newOrder = Order(orderType, side, qnt)
+                if newOrder.side == Side.BUY.value:
+                    matchMarketOrder(newOrder,sellOrderBook)
+                else:
+                    matchMarketOrder(newOrder,buyOrderBook)
         
     else:
         userCommand = "No words in the input"
 
-
+print("buy orders")
 for i in range(len(buyOrderBook)):
     print(heappop(buyOrderBook))
 
-
+print("Sell orders")
+for i in range(len(sellOrderBook)):
+    print(heappop(sellOrderBook))

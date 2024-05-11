@@ -1,9 +1,46 @@
 from order import *
+from heapq import *
 
-def findMatch(order: Order, orderBook: list):
+def findMatch(order: Order, checkOrderBook: list, addOrderBook: list):
 
-    if order.price >= orderBook[0].price:
-        #match qnt
-        orderBook[0].qnt = 0
+    if checkOrderBook and order.price >= checkOrderBook[0].price:
+        bestOrder = checkOrderBook[0]
+
+        if order.qnt > bestOrder.qnt:
+
+            order.qnt = order.qnt - bestOrder.qnt
+            print(f"Trade, price: {abs(bestOrder.price)}, qty: {bestOrder.qnt}")
+            heappop(checkOrderBook)
+            findMatch(order, checkOrderBook, addOrderBook)
+
+        else:
+            bestOrder.qnt = bestOrder.qnt - order.qnt
+            if bestOrder.qnt == 0:
+                print(f"Trade, price: {abs(bestOrder.price)}, qty: {order.qnt}")
+                heappop(checkOrderBook)
+            else:
+                print(f"Trade, price: {abs(bestOrder.price)}, qty: {order.qnt}")
     else:
-        return -1
+        order.invertPrice()
+        heappush(addOrderBook, order)
+
+        
+def matchMarketOrder(order: Order, checkOrderBook: list):
+
+    if checkOrderBook:
+        bestOrder = checkOrderBook[0]
+        if order.qnt > bestOrder.qnt:
+            order.qnt = order.qnt - bestOrder.qnt
+            print(f"Trade, price: {abs(bestOrder.price)}, qty: {bestOrder.qnt}")
+            heappop(checkOrderBook)
+            matchMarketOrder(order, checkOrderBook)
+
+        else:
+            bestOrder.qnt = bestOrder.qnt - order.qnt
+            if bestOrder.qnt == 0:
+                print(f"Trade, price: {abs(bestOrder.price)}, qty: {order.qnt}")
+                heappop(checkOrderBook)
+            else:
+                print(f"Trade, price: {abs(bestOrder.price)}, qty: {order.qnt}")
+    else:
+        print("No Liquidity")

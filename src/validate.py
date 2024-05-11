@@ -26,4 +26,22 @@ def validLimitOrder(userInput: list):
         else:
             print("Side value should be buy or sell")
             return None
-       
+
+
+def validMarketOrder(userInput: list):
+    if len(userInput) != 3:
+        print("market orders should have 2 parameters: market side qnt")
+    else:
+        orderType, side, qnt = userInput
+
+        if isValidEnum(Side, side):            
+            try:
+                qnt = int(qnt)
+            except:
+                print("qnt parameter should be an integer")
+                return None
+            
+            return orderType, side, qnt
+        else:
+            print("Side value should be buy or sell")
+            return None
