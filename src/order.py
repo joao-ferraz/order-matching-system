@@ -37,10 +37,6 @@ class Order:
             return f"[{self.id}] {self.side} {self.qnt} @ {abs(self.price)}"
         else:
             return f"{self.type} {self.side} {self.qnt}"
-
-    def updateOrder(self, price, qnt):
-        self.price = price
-        self.qnt = qnt
     
     def invertPrice(self):
         self.price = self.price*(-1)

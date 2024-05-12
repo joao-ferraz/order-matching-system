@@ -48,20 +48,57 @@ def matchMarketOrder(order: Order, checkOrderBook: list):
 def cancelOrder(orderId, buyOrderBook, sellOrderBook):
 
     # O(N) cancel
+    heapIndex, side = findOrder(orderId, buyOrderBook, sellOrderBook)
+
+    if side == Side.BUY:
+        buyOrderBook.pop(heapIndex)
+        buyOrderBook.sort()
+        print("Order cancelled")
+
+    elif side == Side.SELL:
+        sellOrderBook.pop(heapIndex)
+        sellOrderBook.sort()
+        print("Order cancelled")
+    else:
+        print(f"No order with id: {orderId}")
+
+def findUpdateOrder(orderId, buyOrderBook, sellOrderBook, attToModify):
+
+    heapIndex, side = findOrder(orderId, buyOrderBook, sellOrderBook)
+
+    if side == Side.BUY:
+        order = buyOrderBook[heapIndex]
+    elif side == Side.SELL:
+        order = sellOrderBook[heapIndex]
+    else:
+        print(f"No order with id: {orderId}")
+        return
+    
+    for att in attToModify:
+        if att == "price":
+            print("Type new order price:", end=' ')
+            newPrice = float(input())
+            order.price = newPrice
+
+            if side == Side.BUY:
+                buyOrderBook.sort()
+            else:
+                sellOrderBook.sort()
+        else:
+            print("Type new order qty:", end=' ')
+            newqnt = int(input())
+            order.qnt = newqnt
+
+    print("Order updated")
+
+def findOrder(orderId, buyOrderBook, sellOrderBook):
 
     for heapIndex, order in enumerate(buyOrderBook):
         if orderId == order.id:
-            buyOrderBook.pop(heapIndex)
-            buyOrderBook.sort()
-            print("Order cancelled")
-            return
+            return heapIndex, Side.BUY
 
     for heapIndex, order in enumerate(sellOrderBook):
         if orderId == order.id:
-            sellOrderBook.pop(heapIndex)
-            sellOrderBook.sort()
-            print("Order cancelled")
-            return
-        
-    print(f"No order with id: {orderId}")
-
+            return heapIndex, Side.SELL
+    
+    return -1, None

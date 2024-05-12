@@ -47,11 +47,20 @@ while userCommand[0] != "end":
 
             case "cancel":
                 try:
-                    _, _, orderToCancel = validCancel(userCommand)
+                    orderToCancel = validCancel(userCommand)
                 except:
                     continue
 
                 cancelOrder(orderToCancel, buyOrderBook, sellOrderBook)
+
+            case "update":
+                attToModify = []
+                orderToModify, attToModify = validUpdate(userCommand)
+
+                findUpdateOrder(orderToModify,buyOrderBook,sellOrderBook,attToModify)
+                
+            case "end":
+                break
 
             case _:
                 noMatch()

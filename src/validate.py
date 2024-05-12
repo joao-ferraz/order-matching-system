@@ -60,9 +60,34 @@ def validCancel(userInput: list):
             except:
                 print("order_id should be an integer")
                 return None
-            return _, orderStr, id
+            return id
 
+def validUpdate(userInput: list):
+    l = len(userInput)
+    if l < 4 or l > 5:
+        print("update command should be: update order order_id price qty")
+    else:
 
+        modify = []*(l-3)
+        _, orderStr, id, *_ = userInput
 
+        modify = userInput[3:]
+
+        if orderStr != "order":
+            print("update command should be: update order order_id price qty")
+        else:
+            try:
+                id = int(id)
+            except:
+                print("order_id should be an integer")
+                return None
+            
+            for att in modify:
+                if att != "price" and att != "qty":
+                    print("chose to update price, qty or both")
+                    return None
+                
+            return id, modify
+        
 def noMatch():
     print("Not a valid command. Valid commands are: limit, market, end")
