@@ -44,3 +44,24 @@ def matchMarketOrder(order: Order, checkOrderBook: list):
                 print(f"Trade, price: {abs(bestOrder.price)}, qty: {order.qnt}")
     else:
         print("No Liquidity")
+
+def cancelOrder(orderId, buyOrderBook, sellOrderBook):
+
+    # O(N) cancel
+
+    for heapIndex, order in enumerate(buyOrderBook):
+        if orderId == order.id:
+            buyOrderBook.pop(heapIndex)
+            buyOrderBook.sort()
+            print("Order cancelled")
+            return
+
+    for heapIndex, order in enumerate(sellOrderBook):
+        if orderId == order.id:
+            sellOrderBook.pop(heapIndex)
+            sellOrderBook.sort()
+            print("Order cancelled")
+            return
+        
+    print(f"No order with id: {orderId}")
+

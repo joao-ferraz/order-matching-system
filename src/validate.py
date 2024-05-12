@@ -46,5 +46,23 @@ def validMarketOrder(userInput: list):
             print("Side value should be buy or sell")
             return None
         
+def validCancel(userInput: list):
+    if len(userInput) != 3:
+        print("cancel command should be: cancel order order_id")
+    else:
+        _, orderStr, id = userInput
+
+        if orderStr != "order":
+            print("cancel command should be: cancel order order_id")
+        else:
+            try:
+                id = int(id)
+            except:
+                print("order_id should be an integer")
+                return None
+            return _, orderStr, id
+
+
+
 def noMatch():
     print("Not a valid command. Valid commands are: limit, market, end")

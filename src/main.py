@@ -2,6 +2,7 @@ from order import *
 from heapq import *
 from validate import *
 from matching import *
+import time
 
 userCommand = [None]
 
@@ -24,12 +25,14 @@ while userCommand[0] != "end":
                     continue
                 
                 newOrder = Order(orderType, side, qnt, price)
+                idOrderBook[newOrder.id] = newOrder
+
                 if newOrder.side == Side.BUY.value:
                     findMatch(newOrder,sellOrderBook, buyOrderBook)
                 else:
                     newOrder.invertPrice()
                     findMatch(newOrder,buyOrderBook, sellOrderBook)
-                                   
+
             case "market":
                 try:
                     orderType, side, qnt = validMarketOrder(userCommand)
@@ -41,8 +44,18 @@ while userCommand[0] != "end":
                     matchMarketOrder(newOrder,sellOrderBook)
                 else:
                     matchMarketOrder(newOrder,buyOrderBook)
+
+            case "cancel":
+                try:
+                    _, _, orderToCancel = validCancel(userCommand)
+                except:
+                    continue
+
+                cancelOrder(orderToCancel, buyOrderBook, sellOrderBook)
+
             case _:
                 noMatch()
+                
         
     else:
         userCommand = "No words in the input"

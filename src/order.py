@@ -1,4 +1,5 @@
 from enum import Enum
+import itertools
 
 class Side(Enum):
     BUY = "buy"
@@ -13,20 +14,27 @@ def isValidEnum(EnumClass, value):
     return any(value == item.value for item in EnumClass)
 
 class Order:
+    idIt = itertools.count()
     def __init__(self, type, side, qnt, price = None) -> None:
         self.type = type
         self.side = side
         self.price = price
         self.qnt = qnt
         #implement id
-        self.id = 1
+        self.id = next(self.idIt)
+
+        if self.type == OrderType.LIMIT.value:
+            print(f"Order created: {self.side} {self.qnt} @ {abs(self.price)} {self.id}")
 
     def __lt__(self, other):
-        return self.price < other.price
+        if self.price != other.price:
+            return self.price < other.price
+        else:
+            return self.id < other.id
     
     def __str__(self):
         if self.price != None:
-            return f"{self.side} {self.qnt} @ {abs(self.price)}"
+            return f"[{self.id}] {self.side} {self.qnt} @ {abs(self.price)}"
         else:
             return f"{self.type} {self.side} {self.qnt}"
 
