@@ -8,7 +8,6 @@ def validLimitOrder(userInput: list):
         orderType, side, price, qnt = userInput
 
         if isValidEnum(Side, side):
-            # checa preço e qnt
             try:
                 price = float(price)
             except:
@@ -90,4 +89,4 @@ def validUpdate(userInput: list):
             return id, modify
         
 def noMatch():
-    print("Not a valid command. Valid commands are: limit, market, end")
+    print("Not a valid command. Valid commands are: limit, market, cancel, update, end")

@@ -15,15 +15,15 @@ def isValidEnum(EnumClass, value):
 
 class Order:
     idIt = itertools.count()
-    def __init__(self, type, side, qnt, price = None) -> None:
+    def __init__(self, type, side, qnt, price = None, toPrint=True) -> None:
+        
         self.type = type
         self.side = side
         self.price = price
         self.qnt = qnt
-        #implement id
         self.id = next(self.idIt)
 
-        if self.type == OrderType.LIMIT.value:
+        if self.type == OrderType.LIMIT.value and toPrint == True:
             print(f"Order created: {self.side} {self.qnt} @ {abs(self.price)} {self.id}")
 
     def __lt__(self, other):

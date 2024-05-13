@@ -2,17 +2,15 @@ from order import *
 from heapq import *
 from validate import *
 from matching import *
-import time
 
 userCommand = [None]
 
 sellOrderBook = []
 buyOrderBook = []
-idOrderBook = {}
 
 while userCommand[0] != "end":
 
-    userInput = input()
+    userInput = input(">>>")
 
     if userInput.strip():
         userCommand = userInput.split()
@@ -25,7 +23,6 @@ while userCommand[0] != "end":
                     continue
                 
                 newOrder = Order(orderType, side, qnt, price)
-                idOrderBook[newOrder.id] = newOrder
 
                 if newOrder.side == Side.BUY.value:
                     findMatch(newOrder,sellOrderBook, buyOrderBook)
@@ -55,24 +52,26 @@ while userCommand[0] != "end":
 
             case "update":
                 attToModify = []
-                orderToModify, attToModify = validUpdate(userCommand)
-
-                findUpdateOrder(orderToModify,buyOrderBook,sellOrderBook,attToModify)
+                try:
+                    orderToModify, attToModify = validUpdate(userCommand)
+                except:
+                    continue
                 
+                findUpdateOrder(orderToModify,buyOrderBook,sellOrderBook,attToModify)
+
             case "end":
                 break
 
             case _:
                 noMatch()
-                
-        
+         
     else:
         userCommand = "No words in the input"
 
-print("buy orders")
+print("Buy Order Book")
 for i in range(len(buyOrderBook)):
     print(heappop(buyOrderBook))
 
-print("Sell orders")
+print("Sell Order Book")
 for i in range(len(sellOrderBook)):
     print(heappop(sellOrderBook))

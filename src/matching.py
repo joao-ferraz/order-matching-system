@@ -52,12 +52,12 @@ def cancelOrder(orderId, buyOrderBook, sellOrderBook):
 
     if side == Side.BUY:
         buyOrderBook.pop(heapIndex)
-        buyOrderBook.sort()
+        heapify(buyOrderBook)
         print("Order cancelled")
 
     elif side == Side.SELL:
         sellOrderBook.pop(heapIndex)
-        sellOrderBook.sort()
+        heapify(sellOrderBook)
         print("Order cancelled")
     else:
         print(f"No order with id: {orderId}")
@@ -76,16 +76,24 @@ def findUpdateOrder(orderId, buyOrderBook, sellOrderBook, attToModify):
     
     for att in attToModify:
         if att == "price":
-            print("Type new order price:", end=' ')
+            print("Type new order price:", end=' ', flush=True)
             newPrice = float(input())
             order.price = newPrice
+            newOrder = Order(order.type, order.side, order.qnt, order.price, False)
 
             if side == Side.BUY:
-                buyOrderBook.sort()
+                buyOrderBook.pop(heapIndex)
+                heapify(buyOrderBook)
+                findMatch(newOrder,sellOrderBook, buyOrderBook)
             else:
-                sellOrderBook.sort()
+                sellOrderBook.pop(heapIndex)
+                heapify(sellOrderBook)
+                newOrder.invertPrice()
+                findMatch(newOrder,buyOrderBook, sellOrderBook)
+
+            order = newOrder
         else:
-            print("Type new order qty:", end=' ')
+            print("Type new order qty:", end=' ', flush=True)
             newqnt = int(input())
             order.qnt = newqnt
 
